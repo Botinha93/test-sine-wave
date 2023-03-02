@@ -1,0 +1,69 @@
+<!DOCTYPE html>
+<!--[if lt IE 7]>      <html class="no-js lt-ie9 lt-ie8 lt-ie7"> <![endif]-->
+<!--[if IE 7]>         <html class="no-js lt-ie9 lt-ie8"> <![endif]-->
+<!--[if IE 8]>         <html class="no-js lt-ie9"> <![endif]-->
+<!--[if gt IE 8]>      <html class="no-js"> <!--<![endif]-->
+<html>
+    <head>
+        <meta charset="utf-8">
+        <meta http-equiv="X-UA-Compatible" content="IE=edge">
+        <title>Teste sine</title>
+        <meta name="description" content="">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <link rel="stylesheet" href="">
+    </head>
+    <style>
+        .flexB{
+            position: fixed;
+            display: flex;
+            flex-direction: column;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            justify-content: center;
+            align-items: center;
+            background-color: rgb(245, 244, 244);
+            padding: 10px;
+            border-radius: 5px;
+            border: 1px #ccc solid;
+        }
+    </style>
+    <body>
+        <script>
+            function sineWave(){
+                oscillator = audioCtx.createOscillator();
+                oscillator.type = 'sine';
+                oscillator.frequency.setValueAtTime(frequency, audioCtx.currentTime); 
+                oscillator.connect(audioCtx.destination);
+                frequency -= 500
+                oscillator.frequency.setValueAtTime(frequency, audioCtx.currentTime); 
+                oscillator.start()
+                window.document.getElementById('Numero').innerHTML = frequency;
+                timeout = setTimeout(function (){
+                    oscillator.stop();
+                    sineWave();
+                }, 1000)
+            }
+            function startStop(){
+                if(ss){
+                    ss = !ss;
+                    sineWave();
+                }else{
+                    ss = !ss;
+                    oscillator.stop();
+                    clearTimeout(timeout);
+                }
+            }
+            var timeout
+            var ss = true;
+            var frequency = 20000
+            const audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+            var oscillator;
+        </script>
+        <div class="flexB">
+            <p>Quando começar a ouvir som clique no botão e me informe o numero</p>
+            <h3 id="Numero">20000</h3>
+            <input type="button" value="Iniciar/Parar" onclick="startStop()"/>
+        </div>
+    </body>
+</html>
